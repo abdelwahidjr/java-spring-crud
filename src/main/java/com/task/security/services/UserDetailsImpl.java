@@ -11,16 +11,16 @@ import java.util.Objects;
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private final Long id;
 
-    private String username;
+    private final String username;
 
-    private String email;
+    private final String email;
 
     @JsonIgnore
-    private String password;
+    private final String password;
 
-    private Boolean deleted;
+    private final Boolean deleted;
 
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -67,7 +67,9 @@ public class UserDetailsImpl implements UserDetails {
     }
 
 
-    public Boolean getDeleted() {return deleted;}
+    public Boolean getDeleted() {
+        return deleted;
+    }
 
     @Override
     public boolean isAccountNonExpired() {
