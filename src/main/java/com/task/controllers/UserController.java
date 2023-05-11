@@ -7,13 +7,11 @@ import com.task.repository.UserRepository;
 import com.task.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Properties;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -55,29 +53,8 @@ public class UserController {
     }
 
     @GetMapping("/sendmail")
-    public String welcomeEmail() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("sandbox.smtp.mailtrap.io");
-        mailSender.setPort(2525);
-        mailSender.setUsername("2fb7bc5a660bfa");
-        mailSender.setPassword("3e438a14bd634a");
-
-        Properties properties = new Properties();
-        properties.setProperty("mail.smtp.auth", "true");
-        properties.setProperty("mail.smtp.starttls.enable", "true");
-        mailSender.setJavaMailProperties(properties);
-
-        String from = "abdelwahidjr@gmail.com";
-        String to = "abdelwahidjr@gmail.com";
-
-        SimpleMailMessage message = new SimpleMailMessage();
-
-        message.setFrom(from);
-        message.setTo(to);
-        message.setSubject("Welcome");
-        message.setText("Welcome From App");
-        mailSender.send(message);
-        return "Email sent successfully";
+    public void welcomeEmail() throws MessagingException {
+        userService.welcomeEmail();
     }
 }
 

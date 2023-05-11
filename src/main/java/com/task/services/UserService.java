@@ -13,9 +13,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 
 @Service
 public class UserService {
@@ -79,6 +85,40 @@ public class UserService {
             response.put("message", "error while deleting some users");
             return new ResponseEntity(response, HttpStatus.NOT_ACCEPTABLE);
         }
+
+    }
+
+    public void welcomeEmail() throws MessagingException {
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.mailosaur.net");
+        props.put("mail.smtp.port", "2525");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        props.put("mail.smtp.ssl.trust", "smtp.mailosaur.net");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("gbalvr1h@mailosaur.net", "k4dywOgVM4c7IAiCEgz0I0NiBr3ojBwq");
+            }
+        });
+
+        MimeMessage message = new MimeMessage(session);
+
+        message.setSubject("A test email");
+        message.setFrom(new InternetAddress("MOHAMED ABDELWAHID <abdelwahidjr@gmail.com>"));
+        message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress("MOHAMED ABDELWAHID <abdelwahidjr@gmail.com>"));
+
+        MimeBodyPart mimeBodyPart = new MimeBodyPart();
+        mimeBodyPart.setContent("<p>Hello world.</p>", "text/html; charset=utf-8");
+
+        Multipart multipart = new MimeMultipart();
+        multipart.addBodyPart(mimeBodyPart);
+
+        message.setContent(multipart);
+
+        session.getTransport("smtp").send(message);
 
     }
 }
