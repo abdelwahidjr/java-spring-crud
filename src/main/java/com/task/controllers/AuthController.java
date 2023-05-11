@@ -30,15 +30,12 @@ public class AuthController {
 
     @Autowired
     UserRepository userRepository;
-
-    @Autowired
-    private UserService userService;
-
     @Autowired
     PasswordEncoder encoder;
-
     @Autowired
     JwtUtils jwtUtils;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
