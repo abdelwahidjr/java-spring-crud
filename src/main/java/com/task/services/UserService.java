@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -88,37 +86,41 @@ public class UserService {
 
     }
 
-    public void welcomeEmail() throws MessagingException {
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.mailosaur.net");
-        props.put("mail.smtp.port", "2525");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
-        props.put("mail.smtp.ssl.trust", "smtp.mailosaur.net");
+    public void welcomeEmail(String recipient_email) throws MessagingException {
+        final String username = "vespucci.magellan@gmail.com";
+        final String password = "asbkmpgjlctxsjrg";
 
-        Session session = Session.getInstance(props, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("gbalvr1h@mailosaur.net", "k4dywOgVM4c7IAiCEgz0I0NiBr3ojBwq");
-            }
-        });
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "465");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.socketFactory.port", "465");
+        prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
-        MimeMessage message = new MimeMessage(session);
+        Session session = Session.getInstance(prop,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
 
-        message.setSubject("A test email");
-        message.setFrom(new InternetAddress("MOHAMED ABDELWAHID <abdelwahidjr@gmail.com>"));
-        message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress("MOHAMED ABDELWAHID <abdelwahidjr@gmail.com>"));
+        try {
 
-        MimeBodyPart mimeBodyPart = new MimeBodyPart();
-        mimeBodyPart.setContent("<p>Hello world.</p>", "text/html; charset=utf-8");
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("vespucci.magellan@gmail.com"));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(recipient_email)
+            );
+            message.setSubject("Welcome Mail");
+            message.setText(recipient_email + " user registered successfully");
 
-        Multipart multipart = new MimeMultipart();
-        multipart.addBodyPart(mimeBodyPart);
+            Transport.send(message);
 
-        message.setContent(multipart);
+            System.out.println("Done");
 
-        session.getTransport("smtp").send(message);
-
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -52,9 +52,5 @@ public class UserController {
         return userService.deleteUser(ids);
     }
 
-    @GetMapping("/sendmail")
-    public void welcomeEmail() throws MessagingException {
-        userService.welcomeEmail();
-    }
 }
 

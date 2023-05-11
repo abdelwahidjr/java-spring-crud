@@ -8,6 +8,7 @@ import com.task.payload.response.MessageResponse;
 import com.task.repository.UserRepository;
 import com.task.security.jwt.JwtUtils;
 import com.task.security.services.UserDetailsImpl;
+import com.task.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -28,6 +30,9 @@ public class AuthController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     PasswordEncoder encoder;
@@ -54,26 +59,25 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
-        }
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) throws MessagingException {
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        String username = signUpRequest.getUsername();
+        String email = signUpRequest.getEmail();
+
+        if (userRepository.existsByUsername(username) || userRepository.existsByEmail(email)) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Email is already taken!"));
+                    .body(new MessageResponse("Error: User is already taken!"));
         }
 
         // Create new user account
-        User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
+        User user = new User(username, email,
                 encoder.encode(signUpRequest.getPassword()));
 
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        userService.welcomeEmail(email);
+
+        return ResponseEntity.ok(new MessageResponse(email + " user registered successfully"));
     }
 }
