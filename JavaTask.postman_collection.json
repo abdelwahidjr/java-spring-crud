@@ -14,7 +14,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"0011\",\n    \"email\": \"0011@email.com\",\n    \"password\": \"12345678\"\n}",
+					"raw": "{\n    \"username\": \"3355\",\n    \"email\": \"3355@email.com\",\n    \"password\": \"12345678\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -109,14 +109,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{URL}}/api/users/2",
+					"raw": "{{URL}}/api/users/4",
 					"host": [
 						"{{URL}}"
 					],
 					"path": [
 						"api",
 						"users",
-						"2"
+						"4"
 					]
 				}
 			},
@@ -129,7 +129,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"224488\",\n    \"email\": \"224488@email.com\"\n}",
+					"raw": "{\n    \"username\": \"22448822\",\n    \"email\": \"22448822@email.com\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
