@@ -187,24 +187,6 @@
 				}
 			},
 			"response": []
-		},
-		{
-			"name": "user -  test mail",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{URL}}/api/sendmail",
-					"host": [
-						"{{URL}}"
-					],
-					"path": [
-						"api",
-						"sendmail"
-					]
-				}
-			},
-			"response": []
 		}
 	],
 	"auth": {
